@@ -1,36 +1,57 @@
-﻿Cat[] cats = new Cat[3];
-cats[0] = new Cat("Whiskers", 2);
-cats[1] = new Cat("Mittens", 4);
-cats[2] = new Cat("Shadow", 3);
-foreach (var cat in cats)
+﻿using System.Drawing;
+
+Console.WriteLine("Enter floors");
+int floors = int.Parse(Console.ReadLine());
+Console.WriteLine("Enter flats per floor");
+int flatsPerFloor = int.Parse(Console.ReadLine());
+Console.WriteLine("Enter number of entrances");
+int entrances = int.Parse(Console.ReadLine());
+Flat[,] building = new Flat[flatsPerFloor*entrances, floors];
+for (int e = 1; e <= entrances; e++)
 {
-    Console.WriteLine($"Cat Name: {cat.Name}, Age: {cat.Age}");
-    cat.Meow();
+    for (int f = 1; f <= floors; f++)
+    {
+        for (int ff = 1; ff <= flatsPerFloor; ff++)
+        {
+            var flat = new Flat();
+            flat.FlatNumber = (e-1) * flatsPerFloor * floors + (f-1) * flatsPerFloor + ff;
+            if (f==1)
+                flat.FlatColor = ConsoleColor.White;
+            else if (f==2)
+                flat.FlatColor = ConsoleColor.Red;
+            else if (f==3)
+                flat.FlatColor = ConsoleColor.White;
+            building[((e-1)*flatsPerFloor + ff)-1, f-1] = flat;
+        };
+    }
+}
+
+
+for (int y = building.GetLength(1)-1; y >= 0; y--)
+{
+    for (int x = 0; x <= building.GetLength(0)-1; x++)
+    {
+        building[x, y].ShowInConsole();
+        //Console.Write(building[x, y].FlatNumber);
+        //Console.Write("\t");
+    }
+    Console.WriteLine();
 }
 
 
 
 
-public class Cat
-{
-    public string Name { get; set; }
-    public int Age { get; set; }
-    public Cat() { }
-    public Cat(string name, int age)
-    {
-        Name = name;
-        Age = age;
-    }
-    public void Meow()
-    {
-        Console.WriteLine($"{Name} says Meow!");
-    }
-}
 
 
 public class Flat
 {
     public int FlatNumber { get; set; }
-    public ConsoleColor Color { get; set; }
+    public ConsoleColor FlatColor { get; set; }
+
+    public void ShowInConsole()
+    {
+        Console.ForegroundColor = FlatColor;
+        Console.Write("*");
+    }
 }
 
